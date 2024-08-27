@@ -57,100 +57,6 @@ function toggleKioskInput() {
     }
 }
 
-async function deployToEnv() {
-    await formToggle(true)
-    const projects = [
-        {name: "coreBranch", projectId: "5743", branchName: document.getElementById('coreBranch').value},
-        {name: "monorepoBranch", projectId: "12530", branchName: document.getElementById('monorepoBranch').value},
-        {
-            name: "coreServicesBranch",
-            projectId: "11954",
-            branchName: document.getElementById('coreServicesBranch').value
-        },
-        {name: "apiGatewayBranch", projectId: "5745", branchName: document.getElementById('apiGatewayBranch').value},
-        {name: "dashboardBranch", projectId: "5744", branchName: document.getElementById('dashboardBranch').value},
-
-    ]
-    const envName = document.getElementById('environment').value
-    const deployDevValue = document.getElementById('deployDev').checked
-    const skipTests = document.getElementById('monorepoSkipTests').checked
-    const form = document.getElementById('form')
-    let finalMessage = "";
-
-    if (deployDevValue) {
-        for(const project of projects) {
-            if (project.branchName !== "") {
-                finalMessage += await postProcess(project.projectId, project.branchName, skipTests, envName)
-            } else {
-                finalMessage += await postProcess(project.projectId, "dev", skipTests, envName)
-            }
-        }
-    } else {
-        for(const project of projects) {
-            if (project.branchName !== "") {
-                finalMessage += await postProcess(project.projectId, project.branchName, skipTests, envName)
-            }
-        }
-
-    }
-
-    await endDeployProcess(finalMessage);
-
-
-}
-
-async function postProcess(projectId, branchName, skipTests, envName) {
-    const accessToken = await getKeyFromLocalStorage()
-
-    if (!accessToken) {
-        alert("Access token is missing. Please provide a valid token.");
-        return; // Exit the function if no access token is available
-    }
-
-
-    const body = {
-        ref: branchName,
-        variables: [
-            {
-                "variable_type": "env_var",
-                "key": "PERSONAL_NAMESPACE",
-                "value": envName
-            }
-        ]
-    };
-
-    if (projectId === "12530" && skipTests === true) {
-        body.variables.push({
-            "variable_type": "env_var",
-            "key": "FORCE_SKIP_TESTS",
-            "value": "true"
-        });
-    }
-
-    return fetch("https://gitlab.yum.com/api/v4/projects/" + projectId + "/pipeline", {
-        method: "POST",
-        body: JSON.stringify(body),
-        headers: {
-            "Content-type": "application/json; charset=UTF-8",
-            "PRIVATE-TOKEN": accessToken
-        }
-    })
-        .then((response) => response.json())
-        .then((json) => {
-            if (json.status === "created") {
-                return getProjectName(projectId) + "✅ Request successful: Pipeline created successfully. ✅ \n" +
-                    "Job URL: " + json.web_url + "\n"
-            } else {
-                //alert("❌❌ Request failed: " + JSON.stringify(json.message));
-                return getProjectName(projectId) + "❌ Request failed: " + JSON.stringify(json.message) + " ❌\n"
-            }
-        })
-        .catch((error) => {
-            return getProjectName(projectId) + "❌ Error during request: " + error.message + " ❌\n"
-        });
-}
-
-
 const getKeyFromLocalStorage = () => {
     return chrome.storage.local.get('gitlabToken').then(({ gitlabToken }) => {
         console.log("Value is " + gitlabToken);
@@ -173,18 +79,29 @@ function formToggle(disable) {
         }
     }
 }
-function getProjectName(projectId){
+async function sendDataToBackground() {
     const projects = [
-        {name: "Core:", projectId: "5743"},
-        {name: "Monorepo:", projectId: "12530"},
-        {name: "Core-Services:", projectId: "11954"},
-        {name: "Api-Gateway:", projectId: "5745"},
-        {name: "Dashboard:", projectId: "5744"},
+        { name: "coreBranch", projectId: "5743", branchName: document.getElementById('coreBranch').value },
+        { name: "monorepoBranch", projectId: "12530", branchName: document.getElementById('monorepoBranch').value },
+        { name: "coreServicesBranch", projectId: "11954", branchName: document.getElementById('coreServicesBranch').value },
+        { name: "apiGatewayBranch", projectId: "5745", branchName: document.getElementById('apiGatewayBranch').value },
+        { name: "dashboardBranch", projectId: "5744", branchName: document.getElementById('dashboardBranch').value }
+    ];
+    const envName = document.getElementById('environment').value;
+    const deployDevValue = document.getElementById('deployDev').checked;
+    const skipTests = document.getElementById('monorepoSkipTests').checked;
+    const gitlabToken = await getKeyFromLocalStorage()
 
-    ]
-    const project = projects.find((p) => p.projectId === projectId);
-    return project ? project.name : null;
-
+    chrome.runtime.sendMessage({
+        action: 'deployToEnv',
+        projects: projects,
+        envName: envName,
+        deployDevValue: deployDevValue,
+        skipTests: skipTests,
+        accessToken: gitlabToken
+    }, (response) => {
+        endDeployProcess(response.finalMessage)
+    });
 }
 function endDeployProcess(finalMessage){
     const form = document.getElementById('form')
@@ -223,7 +140,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     submitButton.addEventListener("submit", async (event) => {
         event.preventDefault();
-        await deployToEnv();
+        await formToggle(true)
+        await sendDataToBackground()
+
     });
 });
 

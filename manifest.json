@@ -12,7 +12,10 @@
     "default_title": "Welcome to quick deploy",
     "default_icon": "iconGit.png"
   },
-  "permissions": ["storage"],
+  "permissions": [
+    "storage",
+    "activeTab"
+  ],
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
