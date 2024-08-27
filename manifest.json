@@ -1,6 +1,6 @@
 {
   "name": "Quick Deploy",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "This is chrome extension for quick deploy",
   "manifest_version": 3,
   "author": "Amit Glam",

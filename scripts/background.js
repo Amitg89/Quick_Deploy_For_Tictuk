@@ -93,8 +93,9 @@ async function postProcess(projectId, branchName, skipTests, envName, accessToke
         .then((response) => response.json())
         .then((json) => {
             if (json.status === "created") {
-                return getProjectName(projectId) + "✅ Request successful: Pipeline created successfully. ✅ \n" +
-                    "Job URL: " + json.web_url + "\n";
+                const clickableLink = `<a href="${json.web_url}" target="_blank">Go to pipeline page</a>`;
+                return getProjectName(projectId) + "✅ Pipeline created successfully. \n" +
+                    "Job URL: " + clickableLink + " ✅\n";
             } else {
                 return getProjectName(projectId) + "❌ Request failed: " + JSON.stringify(json.message) + " ❌\n";
             }

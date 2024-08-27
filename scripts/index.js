@@ -1,3 +1,27 @@
+function showModalWithLinks(message) {
+    return new Promise((resolve) => {
+        const modal = document.getElementById('customModal');
+        const modalMessage = document.getElementById('modalMessage');
+        const closeBtn = document.querySelector('.close-btn');
+
+        modalMessage.innerHTML = message;
+        modal.style.display = 'block';
+
+
+        const closeModal = () => {
+            modal.style.display = 'none';
+            resolve();
+        };
+
+        closeBtn.onclick = closeModal;
+
+        window.onclick = function (event) {
+            if (event.target === modal) {
+                closeModal();
+            }
+        };
+    });
+}
 function toggleCoreInput() {
     const inputLine = document.getElementById('coreInputLine');
     const checkbox = document.getElementById('coreCheckbox')
@@ -103,10 +127,11 @@ async function sendDataToBackground() {
         endDeployProcess(response.finalMessage)
     });
 }
-function endDeployProcess(finalMessage){
+
+async function endDeployProcess(finalMessage){
     const form = document.getElementById('form')
 
-    window.alert(finalMessage)
+    await showModalWithLinks(finalMessage)
     form.reset()
     formToggle(false)
     window.close()
