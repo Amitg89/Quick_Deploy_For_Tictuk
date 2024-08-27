@@ -16,14 +16,14 @@ chrome.runtime.onInstalled.addListener(() => {
 });
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.action === 'deployToEnv') {
-        deployToEnv(request.projects, request.envName, request.deployDevValue, request.skipTests, request.accessToken).then(finalMessage => {
+        deployToEnv(request.projects, request.envName, request.deployDevValue, request.deployMasterValue, request.skipTests, request.accessToken).then(finalMessage => {
             sendResponse({ finalMessage });
         });
-        return true; // Required to indicate async response
+        return true;
     }
 });
 
-async function deployToEnv(projects, envName, deployDevValue, skipTests, accessToken) {
+async function deployToEnv(projects, envName, deployDevValue, deployMasterValue, skipTests, accessToken) {
     let finalMessage = "";
 
     if (deployDevValue) {
@@ -32,6 +32,14 @@ async function deployToEnv(projects, envName, deployDevValue, skipTests, accessT
                 finalMessage += await postProcess(project.projectId, project.branchName, skipTests, envName, accessToken);
             } else {
                 finalMessage += await postProcess(project.projectId, "dev", skipTests, envName, accessToken);
+            }
+        }
+    } else if(deployMasterValue){
+        for (const project of projects) {
+            if (project.branchName !== "") {
+                finalMessage += await postProcess(project.projectId, project.branchName, skipTests, envName, accessToken);
+            } else {
+                finalMessage += await postProcess(project.projectId, "master", skipTests, envName, accessToken);
             }
         }
     } else {

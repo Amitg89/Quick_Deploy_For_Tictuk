@@ -71,15 +71,6 @@ function toggleDashboardInput() {
         inputLine.classList.add('hidden');
     }
 }
-function toggleKioskInput() {
-    const inputLine = document.getElementById('kioskInputLine');
-    const checkbox = document.getElementById('kioskCheckbox')
-    if (checkbox.checked) {
-        inputLine.classList.remove('hidden');
-    } else {
-        inputLine.classList.add('hidden');
-    }
-}
 
 const getKeyFromLocalStorage = () => {
     return chrome.storage.local.get('gitlabToken').then(({ gitlabToken }) => {
@@ -113,6 +104,7 @@ async function sendDataToBackground() {
     ];
     const envName = document.getElementById('environment').value;
     const deployDevValue = document.getElementById('deployDev').checked;
+    const deployMasterValue = document.getElementById('deployMaster').checked;
     const skipTests = document.getElementById('monorepoSkipTests').checked;
     const gitlabToken = await getKeyFromLocalStorage()
 
@@ -121,6 +113,7 @@ async function sendDataToBackground() {
         projects: projects,
         envName: envName,
         deployDevValue: deployDevValue,
+        deployMasterValue: deployMasterValue,
         skipTests: skipTests,
         accessToken: gitlabToken
     }, (response) => {
@@ -144,6 +137,9 @@ document.addEventListener('DOMContentLoaded', function () {
     const coreServicesCheckbox = document.getElementById('coreServicesCheckbox')
     const apiGatewayCheckbox = document.getElementById('apiGatewayCheckbox')
     const dashboardCheckbox = document.getElementById('dashboardCheckbox')
+    const deployDevCheckbox = document.getElementById('deployDev')
+    const deployMasterCheckbox = document.getElementById('deployMaster')
+
     const submitButton = document.getElementById('form')
 
     monorepoCheckbox.addEventListener('change', function () {
@@ -161,6 +157,16 @@ document.addEventListener('DOMContentLoaded', function () {
     });
     dashboardCheckbox.addEventListener('change', function () {
         toggleDashboardInput();
+    });
+    deployDevCheckbox.addEventListener('change', function () {
+        if(deployMasterCheckbox.checked){
+            deployMasterCheckbox.checked = false;
+        }
+    });
+    deployMasterCheckbox.addEventListener('change', function () {
+        if(deployDevCheckbox.checked){
+            deployDevCheckbox.checked = false;
+        }
     });
 
     submitButton.addEventListener("submit", async (event) => {
