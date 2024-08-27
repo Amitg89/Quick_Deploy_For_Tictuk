@@ -1,0 +1,23 @@
+{
+  "name": "Quick Deploy",
+  "version": "1.0.0",
+  "description": "This is chrome extension for quick deploy",
+  "manifest_version": 3,
+  "author": "Amit Glam",
+  "background": {
+    "service_worker": "/scripts/background.js"
+  },
+  "action": {
+    "default_popup": "index.html",
+    "default_title": "Welcome to quick deploy",
+    "default_icon": "iconGit.png"
+  },
+  "permissions": ["storage"],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["/scripts/index.js"],
+      "run_at": "document_end"
+    }
+  ]
+}

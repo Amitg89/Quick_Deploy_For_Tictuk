@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="styles/index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href='https://fonts.googleapis.com/css?family=Open Sans' rel='stylesheet'>
+    <meta charset="UTF-8">
+    <title>Quick Deploy For Tictuk</title>
+    <link rel="icon" type="image/x-icon" href="iconGit.png">
+</head>
+<body>
+
+<div class="loader_background" id="loader">
+    <div class="loader"></div>
+</div>
+<div>
+    <div class="flex-container">
+        <h2>🚀 Quick Deploy For Tictuk</h2>
+        <i class="fa fa-gitlab" style="font-size:36px;color:#FCA326;"></i>
+    </div>
+
+
+    <form id="form">
+
+        <input type="text" id="environment" name="environment" placeholder="Environment name" required autofocus pattern="^[a-z-]+$" title="only lowercase allowed">
+        <br>
+
+        <div class="checkbox-wrapper-26">
+            <input type="checkbox" id="deployDev" name="deployDev" />
+            <label for="deployDev">
+                <div class="tick_mark"></div>
+            </label>
+            Deploy dev branch for the rest?
+        </div>
+<!--        <div class="checkbox-wrapper-26">-->
+<!--            <input type="checkbox" id="deployMaster" name="deployMaster" />-->
+<!--            <label for="deployMaster">-->
+<!--                <div class="tick_mark"></div>-->
+<!--            </label>-->
+<!--            Deploy master branch for the rest?-->
+<!--        </div>-->
+
+        <h3>Please select the required projects:</h3>
+
+        <div class="checkbox-wrapper-26">
+            <input type="checkbox" id="monorepoCheckbox" name="monorepo" />
+            <label for="monorepoCheckbox">
+                <div class="tick_mark"></div>
+            </label>
+            Monorepo
+        </div>
+        <div id="monorepoInputLine" class="hidden">
+            <input type="text" id="monorepoBranch" name="monorepoBranch" placeholder="enter monorepo branch">
+            <br>
+            <div class="checkbox-wrapper-26">
+                <input type="checkbox" id="monorepoSkipTests" value="monorepoSkipTests" />
+                <label for="monorepoSkipTests">
+                    <div class="tick_mark"></div>
+                </label>
+                <div class="blink_text">Skip test?</div>
+            </div>
+        </div>
+
+        <br>
+
+        <div class="checkbox-wrapper-26">
+            <input type="checkbox" id="coreCheckbox" name="core" />
+            <label for="coreCheckbox">
+                <div class="tick_mark"></div>
+            </label>
+            Core
+        </div>
+        <div id="coreInputLine" class="hidden">
+            <input type="text" id="coreBranch" name="coreInputLine" placeholder="enter core branch">
+        </div>
+
+        <br>
+
+        <div class="checkbox-wrapper-26">
+            <input type="checkbox" id="coreServicesCheckbox" name="coreServices" />
+            <label for="coreServicesCheckbox">
+                <div class="tick_mark"></div>
+            </label>
+            Core-services
+        </div>
+        <div id="coreServicesInputLine" class="hidden">
+            <input type="text" id="coreServicesBranch" name="coreServicesInputLine" placeholder="enter core-services branch">
+        </div>
+
+        <br>
+
+        <div class="checkbox-wrapper-26">
+            <input type="checkbox" id="apiGatewayCheckbox" name="apiGateway" />
+            <label for="apiGatewayCheckbox">
+                <div class="tick_mark"></div>
+            </label>
+            Api-Gateway
+        </div>
+        <div id="apiGatewayInputLine" class="hidden">
+            <input type="text" id="apiGatewayBranch" name="apiGatewayInputLine" placeholder="enter api-gateway branch">
+        </div>
+
+        <br>
+
+        <div class="checkbox-wrapper-26">
+            <input type="checkbox" id="dashboardCheckbox" name="dashboard"/>
+            <label for="dashboardCheckbox">
+                <div class="tick_mark"></div>
+            </label>
+            Dashboard
+        </div>
+        <div id="dashboardInputLine" class="hidden">
+            <input type="text" id="dashboardBranch" name="dashboardInputLine" placeholder="enter dashboard branch" >
+        </div>
+
+        <br>
+
+<!--        <div class="checkbox-wrapper-26">-->
+<!--            <input type="checkbox" id="kioskCheckbox" name="kiosk"/>-->
+<!--            <label for="kioskCheckbox">-->
+<!--                <div class="tick_mark"></div>-->
+<!--            </label>-->
+<!--            Kiosk-->
+<!--        </div>-->
+<!--        <div id="kioskInputLine" class="hidden">-->
+<!--            <input type="text" id="kioskBranch" name="kioskInputLine" placeholder="enter kiosk branch" >-->
+<!--        </div>-->
+
+<!--        <br>-->
+        <section>
+            <button class="btn" type="submit" id="submitForm">Deploy
+            </button>
+        </section>
+
+    </form>
+
+
+</div>
+
+<script type="text/javascript" src="scripts/index.js"></script>
+</body>
+</html>
