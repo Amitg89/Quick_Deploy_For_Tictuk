@@ -96,11 +96,11 @@ function formToggle(disable) {
 }
 async function sendDataToBackground() {
     const projects = [
-        { name: "coreBranch", projectId: "5743", branchName: document.getElementById('coreBranch').value },
-        { name: "monorepoBranch", projectId: "12530", branchName: document.getElementById('monorepoBranch').value },
-        { name: "coreServicesBranch", projectId: "11954", branchName: document.getElementById('coreServicesBranch').value },
-        { name: "apiGatewayBranch", projectId: "5745", branchName: document.getElementById('apiGatewayBranch').value },
-        { name: "dashboardBranch", projectId: "5744", branchName: document.getElementById('dashboardBranch').value }
+        { name: "coreBranch", projectId: "61381988", branchName: document.getElementById('coreBranch').value },
+        { name: "monorepoBranch", projectId: "61381477", branchName: document.getElementById('monorepoBranch').value },
+        { name: "coreServicesBranch", projectId: "61381858", branchName: document.getElementById('coreServicesBranch').value },
+        { name: "apiGatewayBranch", projectId: "61381918", branchName: document.getElementById('apiGatewayBranch').value },
+        { name: "dashboardBranch", projectId: "61381520", branchName: document.getElementById('dashboardBranch').value }
     ];
     const envName = document.getElementById('environment').value;
     const deployDevValue = document.getElementById('deployDev').checked;

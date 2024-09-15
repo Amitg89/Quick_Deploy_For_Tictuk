@@ -54,11 +54,11 @@ async function deployToEnv(projects, envName, deployDevValue, deployMasterValue,
 }
 function getProjectName(projectId){
     const projects = [
-        {name: "Core:", projectId: "5743"},
-        {name: "Monorepo:", projectId: "12530"},
-        {name: "Core-Services:", projectId: "11954"},
-        {name: "Api-Gateway:", projectId: "5745"},
-        {name: "Dashboard:", projectId: "5744"},
+        {name: "Core:", projectId: "61381988"},
+        {name: "Monorepo:", projectId: "61381477"},
+        {name: "Core-Services:", projectId: "61381858"},
+        {name: "Api-Gateway:", projectId: "61381918"},
+        {name: "Dashboard:", projectId: "61381520"},
 
     ]
     const project = projects.find((p) => p.projectId === projectId);
@@ -82,7 +82,7 @@ async function postProcess(projectId, branchName, skipTests, envName, accessToke
         ]
     };
 
-    if (projectId === "12530" && skipTests) {
+    if (projectId === "61381477" && skipTests) {
         body.variables.push({
             "variable_type": "env_var",
             "key": "FORCE_SKIP_TESTS",
@@ -90,7 +90,7 @@ async function postProcess(projectId, branchName, skipTests, envName, accessToke
         });
     }
 
-    return fetch("https://gitlab.yum.com/api/v4/projects/" + projectId + "/pipeline", {
+    return fetch("https://gitlab.com/api/v4/projects/" + projectId + "/pipeline", {
         method: "POST",
         body: JSON.stringify(body),
         headers: {
