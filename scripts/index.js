@@ -8,10 +8,70 @@ const projects = [
     { name: "apiGatewayBranch", projectId: "61381918",dataListId: 'apiGatewayBranchSuggestions', branchName: '' },
     { name: "dashboardBranch", projectId: "61381520",dataListId: 'dashboardBranchSuggestions', branchName: '' }
 ];
+document.addEventListener('DOMContentLoaded', function() {
+    projects.forEach(function (project) {
+        document.getElementById(project.name).addEventListener('input', function () {
+            debouncedFetchBranches(project.name, project.projectId, project.dataListId);
+        });
+    });
+    const coreCheckbox = document.getElementById('coreCheckbox')
+    const monorepoCheckbox = document.getElementById('monorepoCheckbox')
+    const coreServicesCheckbox = document.getElementById('coreServicesCheckbox')
+    const apiGatewayCheckbox = document.getElementById('apiGatewayCheckbox')
+    const dashboardCheckbox = document.getElementById('dashboardCheckbox')
+    const deployDevCheckbox = document.getElementById('deployDev')
+    const deployMasterCheckbox = document.getElementById('deployMaster')
+    const deployDevContainer = document.getElementById('deployDevContainer')
+    const deployMasterContainer = document.getElementById('deployMasterContainer')
 
-projects.forEach(function(project) {
-    document.getElementById(project.name).addEventListener('input', function() {
-        debouncedFetchBranches(project.name, project.projectId, project.dataListId);
+    const submitButton = document.getElementById('form')
+
+    monorepoCheckbox.addEventListener('change', function () {
+        toggleMonorepoInput();
+    });
+
+    coreCheckbox.addEventListener('change', function () {
+        toggleCoreInput();
+    });
+    coreServicesCheckbox.addEventListener('change', function () {
+        toggleCoreServicesInput();
+    });
+    apiGatewayCheckbox.addEventListener('change', function () {
+        toggleApiGatewayInput();
+    });
+    dashboardCheckbox.addEventListener('change', function () {
+        toggleDashboardInput();
+    });
+    deployDevCheckbox.addEventListener('change', function () {
+        if(deployMasterCheckbox.checked){
+            deployMasterCheckbox.checked = false;
+        }
+    });
+    deployMasterCheckbox.addEventListener('change', function () {
+        if(deployDevCheckbox.checked){
+            deployDevCheckbox.checked = false;
+        }
+    });
+    deployDevContainer.addEventListener('click',function () {
+        if(deployMasterCheckbox.checked){
+            deployMasterCheckbox.checked = false;
+        }
+        deployDevCheckbox.checked = !deployDevCheckbox.checked;
+
+    });
+    deployMasterContainer.addEventListener('click',function () {
+        if(deployDevCheckbox.checked){
+            deployDevCheckbox.checked = false;
+        }
+        deployMasterCheckbox.checked = !deployMasterCheckbox.checked;
+
+    });
+
+    submitButton.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        await formToggle(true)
+        await sendDataToBackground()
+
     });
 });
 
@@ -146,67 +206,6 @@ async function endDeployProcess(finalMessage){
 
 }
 
-document.addEventListener('DOMContentLoaded', function () {
-    const coreCheckbox = document.getElementById('coreCheckbox')
-    const monorepoCheckbox = document.getElementById('monorepoCheckbox')
-    const coreServicesCheckbox = document.getElementById('coreServicesCheckbox')
-    const apiGatewayCheckbox = document.getElementById('apiGatewayCheckbox')
-    const dashboardCheckbox = document.getElementById('dashboardCheckbox')
-    const deployDevCheckbox = document.getElementById('deployDev')
-    const deployMasterCheckbox = document.getElementById('deployMaster')
-    const deployDevContainer = document.getElementById('deployDevContainer')
-    const deployMasterContainer = document.getElementById('deployMasterContainer')
-
-    const submitButton = document.getElementById('form')
-
-    monorepoCheckbox.addEventListener('change', function () {
-        toggleMonorepoInput();
-    });
-
-    coreCheckbox.addEventListener('change', function () {
-        toggleCoreInput();
-    });
-    coreServicesCheckbox.addEventListener('change', function () {
-        toggleCoreServicesInput();
-    });
-    apiGatewayCheckbox.addEventListener('change', function () {
-        toggleApiGatewayInput();
-    });
-    dashboardCheckbox.addEventListener('change', function () {
-        toggleDashboardInput();
-    });
-    deployDevCheckbox.addEventListener('change', function () {
-        if(deployMasterCheckbox.checked){
-            deployMasterCheckbox.checked = false;
-        }
-    });
-    deployMasterCheckbox.addEventListener('change', function () {
-        if(deployDevCheckbox.checked){
-            deployDevCheckbox.checked = false;
-        }
-    });
-    deployDevContainer.addEventListener('click',function () {
-        if(deployMasterCheckbox.checked){
-            deployMasterCheckbox.checked = false;
-        }
-        deployDevCheckbox.checked = !deployDevCheckbox.checked;
-
-    });
-    deployMasterContainer.addEventListener('click',function () {
-        if(deployDevCheckbox.checked){
-            deployDevCheckbox.checked = false;
-        }
-        deployMasterCheckbox.checked = !deployMasterCheckbox.checked;
-
-    });
-
-    submitButton.addEventListener("submit", async (event) => {
-        event.preventDefault();
-        await formToggle(true)
-        await sendDataToBackground()
-
-    });
-});
 
 async function fetchBranches(inputId, projectId, dataListId) {
     const branchInput = document.getElementById(inputId);
