@@ -105,7 +105,7 @@ function formToggle(disable) {
     for (let i = 0, len = formElements.length; i < len; ++i) {
         if (disable) {
             formElements[i].disabled = true;
-            loader.style.display = 'block'
+            loader.style.display = 'flex'
 
         } else {
             formElements[i].disabled = false;
