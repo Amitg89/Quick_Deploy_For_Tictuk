@@ -2,11 +2,11 @@
 let debounceTimer;
 const debouncedFetchBranches = debounce(fetchBranches, 300);
 const projects = [
-    { name: "coreBranch", projectId: "61381988",dataListId: 'coreBranchSuggestions', branchName: document.getElementById('coreBranch').value },
-    { name: "monorepoBranch", projectId: "61381477",dataListId: 'monorepoBranchSuggestions', branchName: document.getElementById('monorepoBranch').value },
-    { name: "coreServicesBranch", projectId: "61381858",dataListId: 'coreServicesBranchSuggestions', branchName: document.getElementById('coreServicesBranch').value },
-    { name: "apiGatewayBranch", projectId: "61381918",dataListId: 'apiGatewayBranchSuggestions', branchName: document.getElementById('apiGatewayBranch').value },
-    { name: "dashboardBranch", projectId: "61381520",dataListId: 'dashboardBranchSuggestions', branchName: document.getElementById('dashboardBranch').value }
+    { name: "coreBranch", projectId: "61381988",dataListId: 'coreBranchSuggestions', branchName: '' },
+    { name: "monorepoBranch", projectId: "61381477",dataListId: 'monorepoBranchSuggestions', branchName: '' },
+    { name: "coreServicesBranch", projectId: "61381858",dataListId: 'coreServicesBranchSuggestions', branchName: '' },
+    { name: "apiGatewayBranch", projectId: "61381918",dataListId: 'apiGatewayBranchSuggestions', branchName: '' },
+    { name: "dashboardBranch", projectId: "61381520",dataListId: 'dashboardBranchSuggestions', branchName: '' }
 ];
 
 projects.forEach(function(project) {
@@ -120,7 +120,9 @@ async function sendDataToBackground() {
     const deployMasterValue = document.getElementById('deployMaster').checked;
     const skipTests = document.getElementById('monorepoSkipTests').checked;
     const gitlabToken = await getKeyFromLocalStorage()
-
+    for (const project of projects) {
+        project.branchName = await document.getElementById(project.name).value
+    }
     chrome.runtime.sendMessage({
         action: 'deployToEnv',
         projects: projects,
