@@ -266,7 +266,7 @@ i {
 }
 
 .logo-part {
-    opacity: 0.6; /* Default lower brightness */
+    opacity: 0.6;
     transition: opacity 0.3s ease;
     animation: brighten 1s infinite ease-in-out;
 }
@@ -287,7 +287,7 @@ i {
     animation-delay: 0.9s;
 }
 
-/* Keyframes to animate brightness */
+
 @keyframes brighten {
     0%, 100% {
         opacity: 0.6;
