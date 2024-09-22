@@ -1,3 +1,22 @@
+
+let debounceTimer;
+const debouncedFetchBranches = debounce(fetchBranches, 300);
+const projects = [
+    { name: "coreBranch", projectId: "61381988",dataListId: 'coreBranchSuggestions', branchName: document.getElementById('coreBranch').value },
+    { name: "monorepoBranch", projectId: "61381477",dataListId: 'monorepoBranchSuggestions', branchName: document.getElementById('monorepoBranch').value },
+    { name: "coreServicesBranch", projectId: "61381858",dataListId: 'coreServicesBranchSuggestions', branchName: document.getElementById('coreServicesBranch').value },
+    { name: "apiGatewayBranch", projectId: "61381918",dataListId: 'apiGatewayBranchSuggestions', branchName: document.getElementById('apiGatewayBranch').value },
+    { name: "dashboardBranch", projectId: "61381520",dataListId: 'dashboardBranchSuggestions', branchName: document.getElementById('dashboardBranch').value }
+];
+
+projects.forEach(function(project) {
+    document.getElementById(project.name).addEventListener('input', function() {
+        debouncedFetchBranches(project.name, project.projectId, project.dataListId);
+    });
+});
+
+
+
 function showModalWithLinks(message) {
     return new Promise((resolve) => {
         const modal = document.getElementById('customModal');
@@ -95,13 +114,7 @@ function formToggle(disable) {
     }
 }
 async function sendDataToBackground() {
-    const projects = [
-        { name: "coreBranch", projectId: "61381988", branchName: document.getElementById('coreBranch').value },
-        { name: "monorepoBranch", projectId: "61381477", branchName: document.getElementById('monorepoBranch').value },
-        { name: "coreServicesBranch", projectId: "61381858", branchName: document.getElementById('coreServicesBranch').value },
-        { name: "apiGatewayBranch", projectId: "61381918", branchName: document.getElementById('apiGatewayBranch').value },
-        { name: "dashboardBranch", projectId: "61381520", branchName: document.getElementById('dashboardBranch').value }
-    ];
+
     const envName = document.getElementById('environment').value;
     const deployDevValue = document.getElementById('deployDev').checked;
     const deployMasterValue = document.getElementById('deployMaster').checked;
@@ -139,6 +152,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const dashboardCheckbox = document.getElementById('dashboardCheckbox')
     const deployDevCheckbox = document.getElementById('deployDev')
     const deployMasterCheckbox = document.getElementById('deployMaster')
+    const deployDevContainer = document.getElementById('deployDevContainer')
+    const deployMasterContainer = document.getElementById('deployMasterContainer')
 
     const submitButton = document.getElementById('form')
 
@@ -168,6 +183,20 @@ document.addEventListener('DOMContentLoaded', function () {
             deployDevCheckbox.checked = false;
         }
     });
+    deployDevContainer.addEventListener('click',function () {
+        if(deployMasterCheckbox.checked){
+            deployMasterCheckbox.checked = false;
+        }
+        deployDevCheckbox.checked = !deployDevCheckbox.checked;
+
+    });
+    deployMasterContainer.addEventListener('click',function () {
+        if(deployDevCheckbox.checked){
+            deployDevCheckbox.checked = false;
+        }
+        deployMasterCheckbox.checked = !deployMasterCheckbox.checked;
+
+    });
 
     submitButton.addEventListener("submit", async (event) => {
         event.preventDefault();
@@ -176,4 +205,53 @@ document.addEventListener('DOMContentLoaded', function () {
 
     });
 });
+
+async function fetchBranches(inputId, projectId, dataListId) {
+    const branchInput = document.getElementById(inputId);
+    const query = branchInput.value.trim();
+
+    // Only fetch branches if the input is at least 3 characters long
+    if (query.length < 3) {
+        return;
+    }
+
+    const accessToken = await getKeyFromLocalStorage(); // Assuming you have a function to get token
+
+    const response = await fetch(`https://gitlab.com/api/v4/projects/${projectId}/repository/branches?search=${query}`, {
+        headers: {
+            'PRIVATE-TOKEN': accessToken
+        }
+    });
+
+    const branches = await response.json();
+    updateDatalist(branches, dataListId);
+}
+
+function debounce(fn, delay) {
+    return function (...args) {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => fn.apply(this, args), delay);
+    };
+}
+
+
+
+
+// Update the datalist with fetched branch suggestions
+function updateDatalist(branches, dataListId) {
+    const datalist = document.getElementById(dataListId);
+
+    // Clear existing options
+    datalist.innerHTML = '';
+
+    // Add new options from the fetched branches
+    branches.forEach(branch => {
+        const option = document.createElement('option');
+        option.value = branch.name; // Set the value as branch name
+        datalist.appendChild(option);
+    });
+}
+
+
+
 
