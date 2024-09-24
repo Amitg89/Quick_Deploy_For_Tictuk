@@ -83,6 +83,17 @@ input[type=text] {
     color: #FCA326;
     background-color : transparent;
     overflow: hidden;
+
+}
+#sticky {
+    display: flex;
+    justify-content: center; /* Center the button horizontally */
+    align-items: center;     /* Center the button vertically if necessary */
+    padding: 0.5rem;
+    background: #F8F8F8;
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
 }
 
 

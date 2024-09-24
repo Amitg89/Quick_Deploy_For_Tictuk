@@ -8,39 +8,60 @@ const projects = [
     { name: "apiGatewayBranch", projectId: "61381918",dataListId: 'apiGatewayBranchSuggestions', branchName: '' },
     { name: "dashboardBranch", projectId: "61381520",dataListId: 'dashboardBranchSuggestions', branchName: '' }
 ];
+const elements = {
+    monorepo: {
+        checkbox:document.getElementById('monorepoCheckbox'),
+        inputContainer: document.getElementById('monorepoInputLine'),
+        inputLine: document.getElementById('monorepoBranch')
+    },
+    core: {
+        checkbox: document.getElementById('coreCheckbox'),
+        inputContainer: document.getElementById('coreInputLine'),
+        inputLine: document.getElementById('coreBranch')
+    },
+    coreServices: {
+        checkbox: document.getElementById('coreServicesCheckbox'),
+        inputContainer: document.getElementById('coreServicesInputLine'),
+        inputLine: document.getElementById('coreServicesBranch')
+    },
+    apiGateway: {
+        checkbox: document.getElementById('apiGatewayCheckbox'),
+        inputContainer: document.getElementById('apiGatewayInputLine'),
+        inputLine: document.getElementById('apiGatewayBranch')
+    },
+    dashboard: {
+        checkbox: document.getElementById('dashboardCheckbox'),
+        inputContainer: document.getElementById('dashboardInputLine'),
+        inputLine: document.getElementById('dashboardBranch')
+    },
+}
 document.addEventListener('DOMContentLoaded', function() {
     projects.forEach(function (project) {
         document.getElementById(project.name).addEventListener('input', function () {
             debouncedFetchBranches(project.name, project.projectId, project.dataListId);
         });
     });
-    const coreCheckbox = document.getElementById('coreCheckbox')
-    const monorepoCheckbox = document.getElementById('monorepoCheckbox')
-    const coreServicesCheckbox = document.getElementById('coreServicesCheckbox')
-    const apiGatewayCheckbox = document.getElementById('apiGatewayCheckbox')
-    const dashboardCheckbox = document.getElementById('dashboardCheckbox')
     const deployDevCheckbox = document.getElementById('deployDev')
     const deployMasterCheckbox = document.getElementById('deployMaster')
     const deployDevContainer = document.getElementById('deployDevContainer')
     const deployMasterContainer = document.getElementById('deployMasterContainer')
-
     const submitButton = document.getElementById('form')
 
-    monorepoCheckbox.addEventListener('change', function () {
-        toggleMonorepoInput();
+    elements.monorepo.checkbox.addEventListener('change', function () {
+        toggleInput(elements.monorepo.checkbox, elements.monorepo.inputContainer,elements.monorepo.inputLine)
     });
 
-    coreCheckbox.addEventListener('change', function () {
-        toggleCoreInput();
+    elements.core.checkbox.addEventListener('change', function () {
+        toggleInput(elements.core.checkbox, elements.core.inputContainer,elements.core.inputLine)
     });
-    coreServicesCheckbox.addEventListener('change', function () {
-        toggleCoreServicesInput();
+    elements.coreServices.checkbox.addEventListener('change', function () {
+        toggleInput(elements.coreServices.checkbox, elements.coreServices.inputContainer,elements.coreServices.inputLine)
     });
-    apiGatewayCheckbox.addEventListener('change', function () {
-        toggleApiGatewayInput();
+    elements.apiGateway.checkbox.addEventListener('change', function () {
+        toggleInput(elements.apiGateway.checkbox, elements.apiGateway.inputContainer,elements.apiGateway.inputLine)
     });
-    dashboardCheckbox.addEventListener('change', function () {
-        toggleDashboardInput();
+    elements.dashboard.checkbox.addEventListener('change', function () {
+        toggleInput(elements.dashboard.checkbox, elements.dashboard.inputContainer,elements.dashboard.inputLine)
     });
     deployDevCheckbox.addEventListener('change', function () {
         if(deployMasterCheckbox.checked){
@@ -67,6 +88,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
     });
 
+    function toggleInput(checkbox, inputContainer, inputLine){
+        if (checkbox.checked) {
+            inputContainer.classList.remove('hidden');
+        } else {
+            inputContainer.classList.add('hidden');
+            inputLine.value="";
+        }
+    }
+
     submitButton.addEventListener("submit", async (event) => {
         event.preventDefault();
         await formToggle(true)
@@ -74,8 +104,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     });
 });
-
-
 
 function showModalWithLinks(message) {
     return new Promise((resolve) => {
@@ -100,55 +128,6 @@ function showModalWithLinks(message) {
             }
         };
     });
-}
-function toggleCoreInput() {
-    const inputLine = document.getElementById('coreInputLine');
-    const checkbox = document.getElementById('coreCheckbox')
-    if (checkbox.checked) {
-        inputLine.classList.remove('hidden');
-    } else {
-        inputLine.classList.add('hidden');
-    }
-}
-
-function toggleMonorepoInput() {
-    const inputLine = document.getElementById('monorepoInputLine');
-    const checkbox = document.getElementById('monorepoCheckbox')
-    if (checkbox.checked) {
-        inputLine.classList.remove('hidden');
-    } else {
-        inputLine.classList.add('hidden');
-    }
-}
-
-function toggleCoreServicesInput() {
-    const inputLine = document.getElementById('coreServicesInputLine');
-    const checkbox = document.getElementById('coreServicesCheckbox')
-    if (checkbox.checked) {
-        inputLine.classList.remove('hidden');
-    } else {
-        inputLine.classList.add('hidden');
-    }
-}
-
-function toggleApiGatewayInput() {
-    const inputLine = document.getElementById('apiGatewayInputLine');
-    const checkbox = document.getElementById('apiGatewayCheckbox')
-    if (checkbox.checked) {
-        inputLine.classList.remove('hidden');
-    } else {
-        inputLine.classList.add('hidden');
-    }
-}
-
-function toggleDashboardInput() {
-    const inputLine = document.getElementById('dashboardInputLine');
-    const checkbox = document.getElementById('dashboardCheckbox')
-    if (checkbox.checked) {
-        inputLine.classList.remove('hidden');
-    } else {
-        inputLine.classList.add('hidden');
-    }
 }
 
 const getKeyFromLocalStorage = () => {
@@ -248,10 +227,11 @@ function updateDatalist(branches, dataListId) {
     // Add new options from the fetched branches
     branches.forEach(branch => {
         const option = document.createElement('option');
-        option.value = branch.name; // Set the value as branch name
+        option.innerHTML = branch.name; // Set the value as branch name
         datalist.appendChild(option);
     });
 }
+
 
 
 
