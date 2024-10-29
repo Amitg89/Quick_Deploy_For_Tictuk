@@ -4,6 +4,8 @@
     <link rel="stylesheet" href="styles/index.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href='https://fonts.googleapis.com/css?family=Open Sans' rel='stylesheet'>
+
+
     <meta charset="UTF-8">
     <title>Quick Deploy For Tictuk</title>
     <link rel="icon" type="image/x-icon" href="icon16.png">
@@ -40,12 +42,12 @@
         <input type="text" id="environment" name="environment" placeholder="Environment name" autocapitalize="off" required autofocus pattern="^[a-z,0-9\-]+$" title="only lowercase allowed">
         <br>
 
-        <div class="checkbox-wrapper-26" id="deployDevContainer">
-            <input type="checkbox" id="deployDev" name="deployDev" />
-            <label for="deployDev" >
+        <div class="checkbox-wrapper-26" id="copyDocsContainer">
+            <input type="checkbox" id="copyDocs" name="copyDocs" />
+            <label for="copyDocs" >
                 <div class="tick_mark"></div>
             </label>
-            Deploy dev branch for the rest/all?
+            <div class="blink_text">Need to copy testing chain documents?</div>
         </div>
 
         <div class="checkbox-wrapper-26" id="deployMasterContainer">
@@ -66,16 +68,9 @@
             Monorepo
         </div>
         <div id="monorepoInputLine" class="hidden">
-            <input type="text" id="monorepoBranch" name="monorepoBranch" placeholder="Enter monorepo branch" autocapitalize="off" autocomplete="off" list="monorepoBranchSuggestions">
-            <datalist id="monorepoBranchSuggestions"></datalist>
+            <input id="monorepoBranch" name="monorepoBranch" placeholder="Enter monorepo branch" autocapitalize="off" autocomplete="off" list="monorepoSuggestions">
+            <datalist id="monorepoSuggestions"></datalist>
             <br>
-            <div class="checkbox-wrapper-26">
-                <input type="checkbox" id="monorepoSkipTests" value="monorepoSkipTests" />
-                <label for="monorepoSkipTests">
-                    <div class="tick_mark"></div>
-                </label>
-                <div class="blink_text">Skip test?</div>
-            </div>
         </div>
 
         <br>
@@ -88,8 +83,8 @@
             Core
         </div>
         <div id="coreInputLine" class="hidden">
-            <input type="text" id="coreBranch" name="coreInputLine" placeholder="enter core branch" autocapitalize="off" autocomplete="off" list="coreBranchSuggestions">
-            <datalist id="coreBranchSuggestions"></datalist>
+            <input id="coreBranch" name="coreBranch" placeholder="enter core branch" autocapitalize="off" autocomplete="off" list="coreSuggestions">
+            <datalist id="coreSuggestions"></datalist>
         </div>
 
         <br>
@@ -102,8 +97,8 @@
             Core-services
         </div>
         <div id="coreServicesInputLine" class="hidden">
-            <input type="text" id="coreServicesBranch" name="coreServicesInputLine" placeholder="enter core-services branch" autocapitalize="off" autocomplete="off" list="coreServicesBranchSuggestions">
-            <datalist id="coreServicesBranchSuggestions"></datalist>
+            <input id="coreServicesBranch" name="coreServicesBranch" placeholder="enter core-services branch" autocapitalize="off" autocomplete="off" list="coreServicesSuggestions">
+            <datalist id="coreServicesSuggestions"></datalist>
         </div>
 
         <br>
@@ -116,8 +111,8 @@
             Api-Gateway
         </div>
         <div id="apiGatewayInputLine" class="hidden">
-            <input type="text" id="apiGatewayBranch" name="apiGatewayInputLine" placeholder="enter api-gateway branch" autocapitalize="off" autocomplete="off" list="apiGatewayBranchSuggestions">
-            <datalist id="apiGatewayBranchSuggestions"></datalist>
+            <input id="apiGatewayBranch" name="apiGatewayBranch" placeholder="enter api-gateway branch" autocapitalize="off" autocomplete="off" list="apiGatewaySuggestions">
+            <datalist id="apiGatewaySuggestions"></datalist>
         </div>
 
         <br>
@@ -130,8 +125,8 @@
             Dashboard
         </div>
         <div id="dashboardInputLine" class="hidden">
-            <input type="text" id="dashboardBranch" name="dashboardInputLine" placeholder="enter dashboard branch" autocapitalize="off" autocomplete="off" list="dashboardBranchSuggestions">
-            <datalist id="dashboardBranchSuggestions"></datalist>
+            <input id="dashboardBranch" name="dashboardBranch" placeholder="enter dashboard branch" autocapitalize="off" autocomplete="off" list="dashboardSuggestions">
+            <datalist id="dashboardSuggestions"></datalist>
         </div>
 
         <br>
@@ -161,6 +156,7 @@
 </div>
 
 <script type="text/javascript" src="scripts/index.js"></script>
+
 
 </body>
 </html>

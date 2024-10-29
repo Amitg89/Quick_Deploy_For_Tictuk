@@ -2,11 +2,11 @@
 let debounceTimer;
 const debouncedFetchBranches = debounce(fetchBranches, 300);
 const projects = [
-    { name: "coreBranch", projectId: "61381988",dataListId: 'coreBranchSuggestions', branchName: '' },
-    { name: "monorepoBranch", projectId: "61381477",dataListId: 'monorepoBranchSuggestions', branchName: '' },
-    { name: "coreServicesBranch", projectId: "61381858",dataListId: 'coreServicesBranchSuggestions', branchName: '' },
-    { name: "apiGatewayBranch", projectId: "61381918",dataListId: 'apiGatewayBranchSuggestions', branchName: '' },
-    { name: "dashboardBranch", projectId: "61381520",dataListId: 'dashboardBranchSuggestions', branchName: '' }
+    { name: "coreBranch", apiName: "CORE_BRANCH", projectId: "61381988",dataListId: 'coreSuggestions', branchName: '' },
+    { name: "monorepoBranch", apiName: "MONOREPO_BRANCH", projectId: "61381477",dataListId: 'monorepoSuggestions', branchName: '' },
+    { name: "coreServicesBranch", apiName: "CORE_SERVICES_BRANCH", projectId: "61381858",dataListId: 'coreServicesSuggestions', branchName: '' },
+    { name: "apiGatewayBranch", apiName: "API_GATEWAY_BRANCH", projectId: "61381918",dataListId: 'apiGatewaySuggestions', branchName: '' },
+    { name: "dashboardBranch", apiName: "DASHBOARD_BRANCH", projectId: "61381520",dataListId: 'dashboardSuggestions', branchName: '' }
 ];
 const elements = {
     monorepo: {
@@ -41,16 +41,15 @@ document.addEventListener('DOMContentLoaded', function() {
             debouncedFetchBranches(project.name, project.projectId, project.dataListId);
         });
     });
-    const deployDevCheckbox = document.getElementById('deployDev')
+    const copyDocsCheckbox = document.getElementById('copyDocs')
     const deployMasterCheckbox = document.getElementById('deployMaster')
-    const deployDevContainer = document.getElementById('deployDevContainer')
+    const copyDocsContainer = document.getElementById('copyDocsContainer')
     const deployMasterContainer = document.getElementById('deployMasterContainer')
     const submitButton = document.getElementById('form')
 
     elements.monorepo.checkbox.addEventListener('change', function () {
         toggleInput(elements.monorepo.checkbox, elements.monorepo.inputContainer,elements.monorepo.inputLine)
     });
-
     elements.core.checkbox.addEventListener('change', function () {
         toggleInput(elements.core.checkbox, elements.core.inputContainer,elements.core.inputLine)
     });
@@ -63,40 +62,20 @@ document.addEventListener('DOMContentLoaded', function() {
     elements.dashboard.checkbox.addEventListener('change', function () {
         toggleInput(elements.dashboard.checkbox, elements.dashboard.inputContainer,elements.dashboard.inputLine)
     });
-    deployDevCheckbox.addEventListener('change', function () {
-        if(deployMasterCheckbox.checked){
-            deployMasterCheckbox.checked = false;
-        }
-    });
-    deployMasterCheckbox.addEventListener('change', function () {
-        if(deployDevCheckbox.checked){
-            deployDevCheckbox.checked = false;
-        }
-    });
-    deployDevContainer.addEventListener('click',function () {
-        if(deployMasterCheckbox.checked){
-            deployMasterCheckbox.checked = false;
-        }
-        deployDevCheckbox.checked = !deployDevCheckbox.checked;
+    copyDocsContainer.addEventListener('click',function () {
+        copyDocsCheckbox.checked = !copyDocsCheckbox.checked;
 
     });
     deployMasterContainer.addEventListener('click',function () {
-        if(deployDevCheckbox.checked){
-            deployDevCheckbox.checked = false;
-        }
         deployMasterCheckbox.checked = !deployMasterCheckbox.checked;
 
     });
-
-    function toggleInput(checkbox, inputContainer, inputLine){
-        if (checkbox.checked) {
-            inputContainer.classList.remove('hidden');
-        } else {
-            inputContainer.classList.add('hidden');
-            inputLine.value="";
+    submitButton.addEventListener('keypress',function (event){
+        if(event.key==='Enter'){
+            event.preventDefault()
         }
-    }
 
+    })
     submitButton.addEventListener("submit", async (event) => {
         event.preventDefault();
         await formToggle(true)
@@ -104,6 +83,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     });
 });
+function toggleInput(checkbox, inputContainer, inputLine){
+    if (checkbox.checked) {
+        inputContainer.classList.remove('hidden');
+    } else {
+        inputContainer.classList.add('hidden');
+        inputLine.value="";
+    }
+}
 
 function showModalWithLinks(message) {
     return new Promise((resolve) => {
@@ -152,12 +139,12 @@ function formToggle(disable) {
         }
     }
 }
+
 async function sendDataToBackground() {
 
     const envName = document.getElementById('environment').value;
-    const deployDevValue = document.getElementById('deployDev').checked;
+    const copyDocsValue = document.getElementById('copyDocs').checked;
     const deployMasterValue = document.getElementById('deployMaster').checked;
-    const skipTests = document.getElementById('monorepoSkipTests').checked;
     const gitlabToken = await getKeyFromLocalStorage()
     for (const project of projects) {
         project.branchName = await document.getElementById(project.name).value
@@ -166,9 +153,8 @@ async function sendDataToBackground() {
         action: 'deployToEnv',
         projects: projects,
         envName: envName,
-        deployDevValue: deployDevValue,
+        copyDocsValue: copyDocsValue,
         deployMasterValue: deployMasterValue,
-        skipTests: skipTests,
         accessToken: gitlabToken
     }, (response) => {
         endDeployProcess(response.finalMessage)
@@ -185,12 +171,10 @@ async function endDeployProcess(finalMessage){
 
 }
 
-
 async function fetchBranches(inputId, projectId, dataListId) {
     const branchInput = document.getElementById(inputId);
     const query = branchInput.value.trim();
 
-    // Only fetch branches if the input is at least 3 characters long
     if (query.length < 3) {
         return;
     }
@@ -214,20 +198,14 @@ function debounce(fn, delay) {
     };
 }
 
-
-
-
-// Update the datalist with fetched branch suggestions
 function updateDatalist(branches, dataListId) {
     const datalist = document.getElementById(dataListId);
 
-    // Clear existing options
     datalist.innerHTML = '';
 
-    // Add new options from the fetched branches
     branches.forEach(branch => {
         const option = document.createElement('option');
-        option.innerHTML = branch.name; // Set the value as branch name
+        option.value = branch.name; // Set the value as branch name
         datalist.appendChild(option);
     });
 }
