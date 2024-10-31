@@ -16,17 +16,17 @@ chrome.runtime.onInstalled.addListener(() => {
 });
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.action === 'deployToEnv') {
-        newDeployToEnv(request.projects, request.envName, request.copyDocsValue, request.deployMasterValue, request.accessToken).then(finalMessage => {
+        newDeployToEnv(request.projects, request.envName, request.copyDocsValue, request.deployMasterValue, request.singleBranchValue, request.accessToken).then(finalMessage => {
             sendResponse({ finalMessage });
         });
         return true;
     }
 });
 
-async function newDeployToEnv(projects, envName, copyDocsValue, deployMasterValue, accessToken) {
+async function newDeployToEnv(projects, envName, copyDocsValue, deployMasterValue, singleBranchValue, accessToken) {
     let finalMessage = "";
     const body = {
-        ref: "main",
+        ref: "not-protected-main",
         variables: [
             {
                 "variable_type": "env_var",
@@ -41,8 +41,17 @@ async function newDeployToEnv(projects, envName, copyDocsValue, deployMasterValu
         ]
     };
 
-
-    if(deployMasterValue){
+    if(singleBranchValue){
+        for (const project of projects) {
+            if (project.branchName === "") {
+                body.variables.push({
+                    "variable_type": "env_var",
+                    "key": project.apiName,
+                    "value": ""
+                });
+            }
+        }
+    }else if(deployMasterValue){
         for (const project of projects) {
             if (project.branchName === "") {
                 project.branchName= "master";

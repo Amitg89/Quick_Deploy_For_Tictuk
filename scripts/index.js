@@ -43,9 +43,13 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     const copyDocsCheckbox = document.getElementById('copyDocs')
     const deployMasterCheckbox = document.getElementById('deployMaster')
+    const singleBranchCheckbox = document.getElementById('singleBranch')
     const copyDocsContainer = document.getElementById('copyDocsContainer')
+    const singleBranchContainer = document.getElementById('singleBranchContainer')
     const deployMasterContainer = document.getElementById('deployMasterContainer')
     const submitButton = document.getElementById('form')
+
+
 
     elements.monorepo.checkbox.addEventListener('change', function () {
         toggleInput(elements.monorepo.checkbox, elements.monorepo.inputContainer,elements.monorepo.inputLine)
@@ -67,8 +71,29 @@ document.addEventListener('DOMContentLoaded', function() {
 
     });
     deployMasterContainer.addEventListener('click',function () {
+        if(singleBranchCheckbox.checked){
+            singleBranchCheckbox.checked = false;
+        }
         deployMasterCheckbox.checked = !deployMasterCheckbox.checked;
 
+    });
+    singleBranchContainer.addEventListener('click',function () {
+        if(deployMasterCheckbox.checked){
+            deployMasterCheckbox.checked = false;
+        }
+        singleBranchCheckbox.checked = !singleBranchCheckbox.checked;
+
+    });
+    singleBranchCheckbox.addEventListener('change', function () {
+
+        if(deployMasterCheckbox.checked){
+            deployMasterCheckbox.checked = false;
+        }
+    });
+    deployMasterCheckbox.addEventListener('change', function () {
+        if(singleBranchCheckbox.checked){
+            singleBranchCheckbox.checked = false;
+        }
     });
     submitButton.addEventListener('keypress',function (event){
         if(event.key==='Enter'){
@@ -77,7 +102,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
     })
     submitButton.addEventListener("submit", async (event) => {
+        const envNameValue = document.getElementById('environment').value;
+        const copyDocsValue = document.getElementById('copyDocs').checked;
         event.preventDefault();
+        if(copyDocsValue && (envNameValue === 'tictuk-tests' || envNameValue === 'staging'))
+        {
+            await showModalWithLinks('It’s not possible to copy documents to staging or tictuk-tests! \nThe branches will deploy without copying the testing chain.')
+        }
         await formToggle(true)
         await sendDataToBackground()
 
@@ -145,6 +176,7 @@ async function sendDataToBackground() {
     const envName = document.getElementById('environment').value;
     const copyDocsValue = document.getElementById('copyDocs').checked;
     const deployMasterValue = document.getElementById('deployMaster').checked;
+    const singleBranchValue = document.getElementById('singleBranch').checked;
     const gitlabToken = await getKeyFromLocalStorage()
     for (const project of projects) {
         project.branchName = await document.getElementById(project.name).value
@@ -155,6 +187,7 @@ async function sendDataToBackground() {
         envName: envName,
         copyDocsValue: copyDocsValue,
         deployMasterValue: deployMasterValue,
+        singleBranchValue: singleBranchValue,
         accessToken: gitlabToken
     }, (response) => {
         endDeployProcess(response.finalMessage)
