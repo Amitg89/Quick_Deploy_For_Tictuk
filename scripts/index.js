@@ -117,6 +117,7 @@ document.addEventListener('DOMContentLoaded', function() {
 function toggleInput(checkbox, inputContainer, inputLine){
     if (checkbox.checked) {
         inputContainer.classList.remove('hidden');
+        inputLine.focus()
     } else {
         inputContainer.classList.add('hidden');
         inputLine.value="";

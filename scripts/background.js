@@ -30,7 +30,7 @@ async function newDeployToEnv(projects, envName, copyDocsValue, deployMasterValu
         variables: [
             {
                 "variable_type": "env_var",
-                "key": "NAMESPACE",
+                "key": "PERSONAL_NAMESPACE",
                 "value": envName
             },
             {
