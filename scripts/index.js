@@ -2,11 +2,12 @@
 let debounceTimer;
 const debouncedFetchBranches = debounce(fetchBranches, 300);
 const projects = [
-    { name: "coreBranch", apiName: "CORE_BRANCH", projectId: "61381988",dataListId: 'coreSuggestions', branchName: '' },
+    // { name: "coreBranch", apiName: "CORE_BRANCH", projectId: "61381988",dataListId: 'coreSuggestions', branchName: '' },
     { name: "monorepoBranch", apiName: "MONOREPO_BRANCH", projectId: "61381477",dataListId: 'monorepoSuggestions', branchName: '' },
-    { name: "coreServicesBranch", apiName: "CORE_SERVICES_BRANCH", projectId: "61381858",dataListId: 'coreServicesSuggestions', branchName: '' },
-    { name: "apiGatewayBranch", apiName: "API_GATEWAY_BRANCH", projectId: "61381918",dataListId: 'apiGatewaySuggestions', branchName: '' },
     { name: "dashboardBranch", apiName: "DASHBOARD_BRANCH", projectId: "61381520",dataListId: 'dashboardSuggestions', branchName: '' }
+    // { name: "coreServicesBranch", apiName: "CORE_SERVICES_BRANCH", projectId: "61381858",dataListId: 'coreServicesSuggestions', branchName: '' },
+    // { name: "apiGatewayBranch", apiName: "API_GATEWAY_BRANCH", projectId: "61381918",dataListId: 'apiGatewaySuggestions', branchName: '' },
+
 ];
 const elements = {
     monorepo: {
@@ -14,26 +15,26 @@ const elements = {
         inputContainer: document.getElementById('monorepoInputLine'),
         inputLine: document.getElementById('monorepoBranch')
     },
-    core: {
-        checkbox: document.getElementById('coreCheckbox'),
-        inputContainer: document.getElementById('coreInputLine'),
-        inputLine: document.getElementById('coreBranch')
-    },
-    coreServices: {
-        checkbox: document.getElementById('coreServicesCheckbox'),
-        inputContainer: document.getElementById('coreServicesInputLine'),
-        inputLine: document.getElementById('coreServicesBranch')
-    },
-    apiGateway: {
-        checkbox: document.getElementById('apiGatewayCheckbox'),
-        inputContainer: document.getElementById('apiGatewayInputLine'),
-        inputLine: document.getElementById('apiGatewayBranch')
-    },
     dashboard: {
         checkbox: document.getElementById('dashboardCheckbox'),
         inputContainer: document.getElementById('dashboardInputLine'),
         inputLine: document.getElementById('dashboardBranch')
     },
+    // core: {
+    //     checkbox: document.getElementById('coreCheckbox'),
+    //     inputContainer: document.getElementById('coreInputLine'),
+    //     inputLine: document.getElementById('coreBranch')
+    // },
+    // coreServices: {
+    //     checkbox: document.getElementById('coreServicesCheckbox'),
+    //     inputContainer: document.getElementById('coreServicesInputLine'),
+    //     inputLine: document.getElementById('coreServicesBranch')
+    // },
+    // apiGateway: {
+    //     checkbox: document.getElementById('apiGatewayCheckbox'),
+    //     inputContainer: document.getElementById('apiGatewayInputLine'),
+    //     inputLine: document.getElementById('apiGatewayBranch')
+    // },
 }
 document.addEventListener('DOMContentLoaded', function() {
     projects.forEach(function (project) {
@@ -54,18 +55,19 @@ document.addEventListener('DOMContentLoaded', function() {
     elements.monorepo.checkbox.addEventListener('change', function () {
         toggleInput(elements.monorepo.checkbox, elements.monorepo.inputContainer,elements.monorepo.inputLine)
     });
-    elements.core.checkbox.addEventListener('change', function () {
-        toggleInput(elements.core.checkbox, elements.core.inputContainer,elements.core.inputLine)
-    });
-    elements.coreServices.checkbox.addEventListener('change', function () {
-        toggleInput(elements.coreServices.checkbox, elements.coreServices.inputContainer,elements.coreServices.inputLine)
-    });
-    elements.apiGateway.checkbox.addEventListener('change', function () {
-        toggleInput(elements.apiGateway.checkbox, elements.apiGateway.inputContainer,elements.apiGateway.inputLine)
-    });
     elements.dashboard.checkbox.addEventListener('change', function () {
         toggleInput(elements.dashboard.checkbox, elements.dashboard.inputContainer,elements.dashboard.inputLine)
     });
+    // elements.core.checkbox.addEventListener('change', function () {
+    //     toggleInput(elements.core.checkbox, elements.core.inputContainer,elements.core.inputLine)
+    // });
+    // elements.coreServices.checkbox.addEventListener('change', function () {
+    //     toggleInput(elements.coreServices.checkbox, elements.coreServices.inputContainer,elements.coreServices.inputLine)
+    // });
+    // elements.apiGateway.checkbox.addEventListener('change', function () {
+    //     toggleInput(elements.apiGateway.checkbox, elements.apiGateway.inputContainer,elements.apiGateway.inputLine)
+    // });
+
     copyDocsContainer.addEventListener('click',function () {
         copyDocsCheckbox.checked = !copyDocsCheckbox.checked;
 
