@@ -20,21 +20,6 @@ const elements = {
         inputContainer: document.getElementById('dashboardInputLine'),
         inputLine: document.getElementById('dashboardBranch')
     },
-    // core: {
-    //     checkbox: document.getElementById('coreCheckbox'),
-    //     inputContainer: document.getElementById('coreInputLine'),
-    //     inputLine: document.getElementById('coreBranch')
-    // },
-    // coreServices: {
-    //     checkbox: document.getElementById('coreServicesCheckbox'),
-    //     inputContainer: document.getElementById('coreServicesInputLine'),
-    //     inputLine: document.getElementById('coreServicesBranch')
-    // },
-    // apiGateway: {
-    //     checkbox: document.getElementById('apiGatewayCheckbox'),
-    //     inputContainer: document.getElementById('apiGatewayInputLine'),
-    //     inputLine: document.getElementById('apiGatewayBranch')
-    // },
 }
 document.addEventListener('DOMContentLoaded', function() {
     projects.forEach(function (project) {
@@ -58,15 +43,6 @@ document.addEventListener('DOMContentLoaded', function() {
     elements.dashboard.checkbox.addEventListener('change', function () {
         toggleInput(elements.dashboard.checkbox, elements.dashboard.inputContainer,elements.dashboard.inputLine)
     });
-    // elements.core.checkbox.addEventListener('change', function () {
-    //     toggleInput(elements.core.checkbox, elements.core.inputContainer,elements.core.inputLine)
-    // });
-    // elements.coreServices.checkbox.addEventListener('change', function () {
-    //     toggleInput(elements.coreServices.checkbox, elements.coreServices.inputContainer,elements.coreServices.inputLine)
-    // });
-    // elements.apiGateway.checkbox.addEventListener('change', function () {
-    //     toggleInput(elements.apiGateway.checkbox, elements.apiGateway.inputContainer,elements.apiGateway.inputLine)
-    // });
 
     copyDocsContainer.addEventListener('click',function () {
         copyDocsCheckbox.checked = !copyDocsCheckbox.checked;

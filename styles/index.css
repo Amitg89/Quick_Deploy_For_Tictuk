@@ -22,6 +22,12 @@ body{
 .flex-container h2 {
     margin-right: 10px; /* Add some space between the text and the icon */
 }
+.input-container {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    gap: 5px; /* Ensures equal spacing between inputs and "OR" */
+}
 h2 {
     font-size: 25px;
     letter-spacing: normal;

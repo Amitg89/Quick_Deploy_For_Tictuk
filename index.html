@@ -39,8 +39,11 @@
 
     <form id="form">
 
+        <div class="input-container">
         <input type="text" id="environment" name="environment" placeholder="Environment name" autocapitalize="off" required autofocus pattern="^[a-z,0-9\-]+$" title="only lowercase allowed">
-        <br>
+        <H2>OR</H2>
+        <input type="text" id="reqPipeline" name="reqPipeline" placeholder="Schedule pipeline" autocapitalize="off" required autofocus pattern="^[a-z,0-9\-]+$" title="only lowercase allowed">
+        </div>
 
         <div class="checkbox-wrapper-26" id="copyDocsContainer">
             <input type="checkbox" id="copyDocs" name="copyDocs" />
@@ -76,10 +79,21 @@
         <div id="monorepoInputLine" class="hidden">
             <input id="monorepoBranch" name="monorepoBranch" placeholder="Enter monorepo branch" autocapitalize="off" autocomplete="off" list="monorepoSuggestions">
             <datalist id="monorepoSuggestions"></datalist>
-            <br>
+        </div>
+        <div class="checkbox-wrapper-26">
+            <input type="checkbox" id="dashboardCheckbox" name="dashboard"/>
+            <label for="dashboardCheckbox">
+                <div class="tick_mark"></div>
+            </label>
+            Dashboard
+        </div>
+        <div id="dashboardInputLine" class="hidden">
+            <input id="dashboardBranch" name="dashboardBranch" placeholder="enter dashboard branch" autocapitalize="off" autocomplete="off" list="dashboardSuggestions">
+            <datalist id="dashboardSuggestions"></datalist>
         </div>
 
         <br>
+
 
 <!--        <div class="checkbox-wrapper-26">-->
 <!--            <input type="checkbox" id="coreCheckbox" name="core" />-->
@@ -121,21 +135,8 @@
 <!--            <datalist id="apiGatewaySuggestions"></datalist>-->
 <!--        </div>-->
 
-        <br>
 
-        <div class="checkbox-wrapper-26">
-            <input type="checkbox" id="dashboardCheckbox" name="dashboard"/>
-            <label for="dashboardCheckbox">
-                <div class="tick_mark"></div>
-            </label>
-            Dashboard
-        </div>
-        <div id="dashboardInputLine" class="hidden">
-            <input id="dashboardBranch" name="dashboardBranch" placeholder="enter dashboard branch" autocapitalize="off" autocomplete="off" list="dashboardSuggestions">
-            <datalist id="dashboardSuggestions"></datalist>
-        </div>
 
-        <br>
 
         <div id="sticky">
         <section>
