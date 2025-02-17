@@ -25,6 +25,15 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             sendResponse({ finalMessage });
         });
         return true;
+    } else if (request.action === 'clearStorage') {
+        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+            if (tabs.length > 0) {
+                chrome.scripting.executeScript({
+                    target: { tabId: tabs[0].id },
+                    func: clearLocalStorageAndCookies
+                });
+            }
+        });
     }
 });
 async function runOnDemandPipeline(selectedPipelines, accessToken) {
@@ -133,4 +142,17 @@ async function postProcess(body , accessToken, pipelineId = null) {
         .catch((error) => {
             return "❌ Error during request: " + error.message + " ❌\n";
         });
+}
+function clearLocalStorageAndCookies() {
+    localStorage.clear();
+    sessionStorage.clear();
+
+    document.cookie.split(";").forEach((cookie) => {
+        const eqPos = cookie.indexOf("=");
+        const name = eqPos > -1 ? cookie.substring(0, eqPos) : cookie;
+        document.cookie =
+            name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
+    });
+
+    window.location.reload();
 }

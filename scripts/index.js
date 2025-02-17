@@ -38,9 +38,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const deploySubmitButton = document.getElementById('deployForm')
     const onDemandSubmitButton = document.getElementById('onDemandForm')
     const environmentInputField = document.getElementById('environment');
-    const triggerElement = document.querySelector(".tanuki-shape"); // Update selector if needed
+    const triggerElement = document.querySelector(".tanuki-shape");
+    const clearTrigger = document.querySelector(".tanuki-shape.chin");
     const tabButtons = document.querySelectorAll(".tab-button");
     let clickCount = 0;
+    let clearClickCount = 0;
 
 
 
@@ -72,6 +74,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     button.style.display = "none"; // Hide tabs
                 }
             });
+        }
+    });
+    clearTrigger.addEventListener("click", function () {
+        clearClickCount++;
+
+        if (clearClickCount === 5) {
+            clearClickCount = 0;
+            chrome.runtime.sendMessage({ action: "clearStorage" });
         }
     });
     copyDocsContainer.addEventListener('click',function () {
