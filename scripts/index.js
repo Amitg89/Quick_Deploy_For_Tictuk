@@ -111,6 +111,7 @@ document.addEventListener('DOMContentLoaded', function() {
     deploySubmitButton.addEventListener("submit", async (event) => {
         const envNameValue = document.getElementById('environment').value;
         const copyDocsValue = document.getElementById('copyDocs').checked;
+
         event.preventDefault();
         if(copyDocsValue && (envNameValue === 'tictuk-tests' || envNameValue === 'staging'))
         {
@@ -172,6 +173,7 @@ function formToggle(disable, formId) {
     const form = document.getElementById(formId)
     const loader = document.getElementById("loader")
     const formElements = form.elements
+
     for (let i = 0, len = formElements.length; i < len; ++i) {
         if (disable) {
             formElements[i].disabled = true;
@@ -185,12 +187,12 @@ function formToggle(disable, formId) {
 }
 
 async function sendDeployDataToBackground() {
-
     const envName = document.getElementById('environment').value;
     const copyDocsValue = document.getElementById('copyDocs').checked;
     const deployMasterValue = document.getElementById('deployMaster').checked;
     const singleBranchValue = document.getElementById('singleBranch').checked;
     const gitlabToken = await getKeyFromLocalStorage()
+
     for (const project of projects) {
         project.branchName = await document.getElementById(project.name).value
     }
@@ -207,7 +209,6 @@ async function sendDeployDataToBackground() {
     });
 }
 async function sendOnDemandDataToBackground() {
-
     const checkboxes = collectSelectedPipelines()
     const gitlabToken = await getKeyFromLocalStorage()
 
@@ -227,7 +228,6 @@ async function endDeployProcess(finalMessage, formId){
     form.reset()
     formToggle(false, formId)
     window.close()
-
 }
 
 async function fetchBranches(inputId, projectId, dataListId) {

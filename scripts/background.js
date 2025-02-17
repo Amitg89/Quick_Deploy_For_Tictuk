@@ -31,7 +31,6 @@ async function runOnDemandPipeline(selectedPipelines, accessToken) {
     let finalMessage = "";
 
     for (const pipeline of selectedPipelines) {
-
         finalMessage = await postProcess(null, accessToken, pipeline.pipelineId);
     }
     return finalMessage;
@@ -86,7 +85,7 @@ async function deployToEnv(projects, envName, copyDocsValue, deployMasterValue, 
     return finalMessage;
 }
 
-async function postProcess(body, accessToken, pipelineId = null) {
+async function postProcess(body , accessToken, pipelineId = null) {
     if (!accessToken) {
         return "Access token is missing. Please provide a valid token.\n";
     }
@@ -94,7 +93,6 @@ async function postProcess(body, accessToken, pipelineId = null) {
     let url, requestBody;
 
     if (pipelineId !== null) {
-        // Use schedule trigger endpoint
         url = `https://gitlab.com/api/v4/projects/61381477/pipeline_schedules/${pipelineId}/play`;
         requestBody = {};
     } else {
