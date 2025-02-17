@@ -1,8 +1,8 @@
 
 html
 {
-    width: 400px;  /* max: 800px */
-    height: 430px; /* max: 600px */
+    width: 400px;
+    height: 450px;
 
 }
 html * {
@@ -16,17 +16,17 @@ body{
 }
 .flex-container {
     display: flex;
-    align-items: center; /* Align items vertically centered */
+    align-items: center;
 }
 
 .flex-container h2 {
-    margin-right: 10px; /* Add some space between the text and the icon */
+    margin-right: 10px;
 }
 .input-container {
     display: flex;
     flex-direction: column;
     align-items: left;
-    gap: 5px; /* Ensures equal spacing between inputs and "OR" */
+    gap: 5px;
 }
 h2 {
     font-size: 25px;
@@ -93,8 +93,8 @@ input[type=text] {
 }
 #sticky {
     display: flex;
-    justify-content: center; /* Center the button horizontally */
-    align-items: center;     /* Center the button vertically if necessary */
+    justify-content: center;
+    align-items: center;
     padding: 0.5rem;
     background: #F8F8F8;
     position: sticky;
@@ -157,7 +157,7 @@ i {
 }
 
 .checkbox-wrapper-26 label {
-    --size: 20px; /* Checkbox size */
+    --size: 20px;
     --shadow: calc(var(--size) * .07) calc(var(--size) * .1);
 
     position: relative;
@@ -172,7 +172,7 @@ i {
     0.2s ease box-shadow;
     overflow: hidden;
     z-index: 1;
-    margin-right: 10px; /* Margin between checkbox and text */
+    margin-right: 10px;
 }
 
 .checkbox-wrapper-26 label:before {
@@ -364,17 +364,17 @@ i {
 }
 
 .tanuki-shape:hover {
-    filter: brightness(1.3); /* Makes the shape brighter */
+    filter: brightness(1.3);
 }
 .tab-pane {
-    display: none; /* Hide all tab panes by default */
+    display: none;
 }
 
 .tab-pane.active {
-    display: block; /* Only show the active tab pane */
+    display: block;
 }
 
-/* Optional styling for better appearance */
+
 .tabs {
     width: 100%;
     margin: 20px 0;
@@ -392,7 +392,7 @@ i {
     cursor: pointer;
     border-radius: 4px 4px 0 0;
     margin-right: 2px;
-    display: none; /* Use display none to remove space */
+    display: none;
     transition: opacity 0.3s ease-in-out;
 }
 
