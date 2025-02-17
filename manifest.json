@@ -1,6 +1,6 @@
 {
   "name": "Quick Deploy",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "description": "This is chrome extension for quick deploy",
   "manifest_version": 3,
   "author": "Amit Glam",
@@ -21,7 +21,8 @@
   },
   "permissions": [
     "storage",
-    "activeTab"
+    "activeTab",
+    "tabs"
   ],
   "content_scripts": [
     {

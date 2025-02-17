@@ -35,119 +35,142 @@
             <path fill="#FC6D26" d="M5.01 11.461a11.43 11.43 0 0 0-4.56-2.05L.416 9.5a6.297 6.297 0 0 0 2.09 7.278l.012.01.03.022 5.16 3.867 4.745-3.584-7.444-5.632Z" class="tanuki-shape left-cheek"></path>
         </svg>
     </div>
-
-
-    <form id="form">
-
-        <div class="input-container">
-        <input type="text" id="environment" name="environment" placeholder="Environment name" autocapitalize="off" required autofocus pattern="^[a-z,0-9\-]+$" title="only lowercase allowed">
-        <H2>OR</H2>
-        <input type="text" id="reqPipeline" name="reqPipeline" placeholder="Schedule pipeline" autocapitalize="off" required autofocus pattern="^[a-z,0-9\-]+$" title="only lowercase allowed">
+    <div class="tabs">
+        <div class="tab-buttons">
+            <button class="tab-button active" data-tab="tab1">Deploy</button>
+            <button class="tab-button" data-tab="tab2">On Demand Suite</button>
         </div>
+        <div class="tab-content">
+            <div id="tab1" class="tab-pane active">
 
-        <div class="checkbox-wrapper-26" id="copyDocsContainer">
-            <input type="checkbox" id="copyDocs" name="copyDocs" />
-            <label for="copyDocs" >
-                <div class="tick_mark"></div>
-            </label>
-            <div class="blink_text">Need to copy testing chain documents?</div>
+
+                <form id="deployForm">
+
+                    <div class="input-container">
+                    <input type="text" id="environment" name="environment" placeholder="Environment name" autocapitalize="off" required autofocus pattern="^[a-z,0-9\-]+$" title="only lowercase allowed">
+                    </div>
+
+                    <div class="checkbox-wrapper-26" id="copyDocsContainer">
+                        <input type="checkbox" id="copyDocs" name="copyDocs" />
+                        <label for="copyDocs" >
+                            <div class="tick_mark"></div>
+                        </label>
+                        <div class="blink_text">Need to copy testing chain documents?</div>
+                    </div>
+                    <div class="checkbox-wrapper-26" id="singleBranchContainer">
+                        <input type="checkbox" id="singleBranch" name="singleBranch" />
+                        <label for="singleBranch">
+                            <div class="tick_mark"></div>
+                        </label>
+                        Deploy the selected branches only?
+                    </div>
+                    <div class="checkbox-wrapper-26" id="deployMasterContainer">
+                        <input type="checkbox" id="deployMaster" name="deployMaster" />
+                        <label for="deployMaster">
+                            <div class="tick_mark"></div>
+                        </label>
+                        Deploy master branch for the rest/all?
+                    </div>
+
+                    <h3>Please select the required projects:</h3>
+
+                    <div class="checkbox-wrapper-26">
+                        <input type="checkbox" id="monorepoCheckbox" name="monorepo" />
+                        <label for="monorepoCheckbox">
+                            <div class="tick_mark"></div>
+                        </label>
+                        Monorepo
+                    </div>
+                    <div id="monorepoInputLine" class="hidden">
+                        <input id="monorepoBranch" name="monorepoBranch" placeholder="Enter monorepo branch" autocapitalize="off" autocomplete="off" list="monorepoSuggestions">
+                        <datalist id="monorepoSuggestions"></datalist>
+                    </div>
+                    <div class="checkbox-wrapper-26">
+                        <input type="checkbox" id="dashboardCheckbox" name="dashboard"/>
+                        <label for="dashboardCheckbox">
+                            <div class="tick_mark"></div>
+                        </label>
+                        Dashboard
+                    </div>
+                    <div id="dashboardInputLine" class="hidden">
+                        <input id="dashboardBranch" name="dashboardBranch" placeholder="enter dashboard branch" autocapitalize="off" autocomplete="off" list="dashboardSuggestions">
+                        <datalist id="dashboardSuggestions"></datalist>
+                    </div>
+
+                    <br>
+
+                    <div id="sticky">
+                    <section>
+                        <button class="btn" type="submit" id="submitForm">Deploy
+                        </button>
+                    </section>
+                    </div>
+
+                </form>
+
+
+            </div>
         </div>
-        <div class="checkbox-wrapper-26" id="singleBranchContainer">
-            <input type="checkbox" id="singleBranch" name="singleBranch" />
-            <label for="singleBranch">
-                <div class="tick_mark"></div>
-            </label>
-            Deploy the selected branches only?
+        <div id="tab2" class="tab-pane">
+            <form id="onDemandForm">
+
+                <div class="checkbox-wrapper-26">
+                    <input type="checkbox" id="gtmSuite" name="gtmSuite" data-pipeline="2770460"/>
+                    <label for="gtmSuite" >
+                        <div class="tick_mark"></div>
+                    </label>
+                    GTM Test Suite
+                </div>
+                <div class="checkbox-wrapper-26">
+                    <input type="checkbox" id="afterReleaseSuite" name="afterReleaseSuite" data-pipeline="2692136"/>
+                    <label for="afterReleaseSuite" >
+                        <div class="tick_mark"></div>
+                    </label>
+                    Production After Release Suite
+                </div>
+                <div class="checkbox-wrapper-26">
+                    <input type="checkbox" id="dayTimeSuite" name="dayTimeSuite" data-pipeline="1637014"/>
+                    <label for="dayTimeSuite" >
+                        <div class="tick_mark"></div>
+                    </label>
+                    Production Day Time Suite
+                </div>
+                <div class="checkbox-wrapper-26">
+                    <input type="checkbox" id="nightTimeSuite" name="nightTimeSuite" data-pipeline="1637015"/>
+                    <label for="nightTimeSuite" >
+                        <div class="tick_mark"></div>
+                    </label>
+                    Production Night Time Suite
+                </div>
+                <div class="checkbox-wrapper-26">
+                    <input type="checkbox" id="stagingTestSuite" name="stagingTestSuite" data-pipeline="2691109"/>
+                    <label for="stagingTestSuite" >
+                        <div class="tick_mark"></div>
+                    </label>
+                    Staging Desktop Test Suite
+                </div>
+                <div class="checkbox-wrapper-26">
+                    <input type="checkbox" id="paymentsSuite" name="paymentsSuite" data-pipeline="1637016"/>
+                    <label for="paymentsSuite" >
+                        <div class="tick_mark"></div>
+                    </label>
+                    Payment Gateways Test Suite
+                </div>
+                <div class="checkbox-wrapper-26">
+                    <input type="checkbox" id="whatsappSuite" name="whatsappSuite" data-pipeline="1637019"/>
+                    <label for="whatsappSuite" >
+                        <div class="tick_mark"></div>
+                    </label>
+                    Whatsapp Test Suite
+                </div>
+                <br>
+                    <section>
+                        <button class="btn" type="submit" id="onDemandSubmitForm">Deploy
+                        </button>
+                    </section>
+            </form>
         </div>
-        <div class="checkbox-wrapper-26" id="deployMasterContainer">
-            <input type="checkbox" id="deployMaster" name="deployMaster" />
-            <label for="deployMaster">
-                <div class="tick_mark"></div>
-            </label>
-            Deploy master branch for the rest/all?
-        </div>
-
-        <h3>Please select the required projects:</h3>
-
-        <div class="checkbox-wrapper-26">
-            <input type="checkbox" id="monorepoCheckbox" name="monorepo" />
-            <label for="monorepoCheckbox">
-                <div class="tick_mark"></div>
-            </label>
-            Monorepo
-        </div>
-        <div id="monorepoInputLine" class="hidden">
-            <input id="monorepoBranch" name="monorepoBranch" placeholder="Enter monorepo branch" autocapitalize="off" autocomplete="off" list="monorepoSuggestions">
-            <datalist id="monorepoSuggestions"></datalist>
-        </div>
-        <div class="checkbox-wrapper-26">
-            <input type="checkbox" id="dashboardCheckbox" name="dashboard"/>
-            <label for="dashboardCheckbox">
-                <div class="tick_mark"></div>
-            </label>
-            Dashboard
-        </div>
-        <div id="dashboardInputLine" class="hidden">
-            <input id="dashboardBranch" name="dashboardBranch" placeholder="enter dashboard branch" autocapitalize="off" autocomplete="off" list="dashboardSuggestions">
-            <datalist id="dashboardSuggestions"></datalist>
-        </div>
-
-        <br>
-
-
-<!--        <div class="checkbox-wrapper-26">-->
-<!--            <input type="checkbox" id="coreCheckbox" name="core" />-->
-<!--            <label for="coreCheckbox">-->
-<!--                <div class="tick_mark"></div>-->
-<!--            </label>-->
-<!--            Core-->
-<!--        </div>-->
-<!--        <div id="coreInputLine" class="hidden">-->
-<!--            <input id="coreBranch" name="coreBranch" placeholder="enter core branch" autocapitalize="off" autocomplete="off" list="coreSuggestions">-->
-<!--            <datalist id="coreSuggestions"></datalist>-->
-<!--        </div>-->
-
-<!--        <br>-->
-
-<!--        <div class="checkbox-wrapper-26">-->
-<!--            <input type="checkbox" id="coreServicesCheckbox" name="coreServices" />-->
-<!--            <label for="coreServicesCheckbox">-->
-<!--                <div class="tick_mark"></div>-->
-<!--            </label>-->
-<!--            Core-services-->
-<!--        </div>-->
-<!--        <div id="coreServicesInputLine" class="hidden">-->
-<!--            <input id="coreServicesBranch" name="coreServicesBranch" placeholder="enter core-services branch" autocapitalize="off" autocomplete="off" list="coreServicesSuggestions">-->
-<!--            <datalist id="coreServicesSuggestions"></datalist>-->
-<!--        </div>-->
-
-<!--        <br>-->
-
-<!--        <div class="checkbox-wrapper-26">-->
-<!--            <input type="checkbox" id="apiGatewayCheckbox" name="apiGateway" />-->
-<!--            <label for="apiGatewayCheckbox">-->
-<!--                <div class="tick_mark"></div>-->
-<!--            </label>-->
-<!--            Api-Gateway-->
-<!--        </div>-->
-<!--        <div id="apiGatewayInputLine" class="hidden">-->
-<!--            <input id="apiGatewayBranch" name="apiGatewayBranch" placeholder="enter api-gateway branch" autocapitalize="off" autocomplete="off" list="apiGatewaySuggestions">-->
-<!--            <datalist id="apiGatewaySuggestions"></datalist>-->
-<!--        </div>-->
-
-
-
-
-        <div id="sticky">
-        <section>
-            <button class="btn" type="submit" id="submitForm">Deploy
-            </button>
-        </section>
-        </div>
-
-    </form>
-
-
+    </div>
 </div>
 
 <script type="text/javascript" src="scripts/index.js"></script>

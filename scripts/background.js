@@ -16,14 +16,28 @@ chrome.runtime.onInstalled.addListener(() => {
 });
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.action === 'deployToEnv') {
-        newDeployToEnv(request.projects, request.envName, request.copyDocsValue, request.deployMasterValue, request.singleBranchValue, request.accessToken).then(finalMessage => {
+        deployToEnv(request.projects, request.envName, request.copyDocsValue, request.deployMasterValue, request.singleBranchValue, request.accessToken).then(finalMessage => {
+            sendResponse({ finalMessage });
+        });
+        return true;
+    } else if (request.action === 'onDemandSuite') {
+        runOnDemandPipeline(request.selectedPipelines, request.accessToken).then(finalMessage => {
             sendResponse({ finalMessage });
         });
         return true;
     }
 });
+async function runOnDemandPipeline(selectedPipelines, accessToken) {
+    let finalMessage = "";
 
-async function newDeployToEnv(projects, envName, copyDocsValue, deployMasterValue, singleBranchValue, accessToken) {
+    for (const pipeline of selectedPipelines) {
+
+        finalMessage = await postProcess(null, accessToken, pipeline.pipelineId);
+    }
+    return finalMessage;
+}
+
+async function deployToEnv(projects, envName, copyDocsValue, deployMasterValue, singleBranchValue, accessToken) {
     let finalMessage = "";
     const body = {
         ref: "not-protected-main",
@@ -67,19 +81,30 @@ async function newDeployToEnv(projects, envName, copyDocsValue, deployMasterValu
             });
         }
     }
-    finalMessage += await newPostProcess(body, accessToken);
+    finalMessage += await postProcess(body, accessToken);
 
     return finalMessage;
 }
-async function newPostProcess(body, accessToken) {
 
+async function postProcess(body, accessToken, pipelineId = null) {
     if (!accessToken) {
         return "Access token is missing. Please provide a valid token.\n";
     }
 
-    return fetch("https://gitlab.com/api/v4/projects/62414226/pipeline", {
+    let url, requestBody;
+
+    if (pipelineId !== null) {
+        // Use schedule trigger endpoint
+        url = `https://gitlab.com/api/v4/projects/61381477/pipeline_schedules/${pipelineId}/play`;
+        requestBody = {};
+    } else {
+        url = "https://gitlab.com/api/v4/projects/62414226/pipeline";
+        requestBody = body;
+    }
+
+    return fetch(url, {
         method: "POST",
-        body: JSON.stringify(body),
+        body: JSON.stringify(requestBody),
         headers: {
             "Content-type": "application/json; charset=UTF-8",
             "PRIVATE-TOKEN": accessToken
@@ -87,106 +112,27 @@ async function newPostProcess(body, accessToken) {
     })
         .then((response) => response.json())
         .then((json) => {
-            if (json.status === "created") {
-                const clickableLink = `<a href="${json.web_url}" target="_blank">Go to pipeline page</a>`;
-                return "✅ MultiDeploy pipeline created successfully. \n" +
-                    "Job URL: " + clickableLink + " ✅\n";
+            if (pipelineId !== null) {
+                // Handle schedule trigger response
+                if (json.message === "201 Created") {
+                    const clickableLink = '<a href="https://gitlab.com/yumbrands/tictuk/monorepo/-/pipelines" target="_blank">Go to pipelines page</a>';
+                    return "✅ Pipeline schedule triggered successfully. \n" +
+                         clickableLink + " ✅\n";
+                } else {
+                    return "❌ Pipeline schedule trigger failed: " + JSON.stringify(json.message || 'Unknown error') + " ❌\n";
+                }
             } else {
-                return "❌ MultiDeploy request failed: " + JSON.stringify(json.message) + " ❌\n";
+                // Handle normal pipeline creation response
+                if (json.status === "created") {
+                    const clickableLink = `<a href="${json.web_url}" target="_blank">Go to pipeline page</a>`;
+                    return "✅ MultiDeploy pipeline created successfully. \n" +
+                        "Job URL: " + clickableLink + " ✅\n";
+                } else {
+                    return "❌ MultiDeploy request failed: " + JSON.stringify(json.message) + " ❌\n";
+                }
             }
         })
         .catch((error) => {
             return "❌ Error during request: " + error.message + " ❌\n";
         });
-
 }
-// async function deployToEnv(projects, envName, copyDocsValue, deployMasterValue, accessToken) {
-//     let finalMessage = "";
-//
-//     if (deployDevValue) {
-//         for (const project of projects) {
-//             if (project.branchName !== "") {
-//                 finalMessage += await postProcess(project.projectId, project.branchName, skipTests, envName, accessToken);
-//             } else {
-//                 finalMessage += await postProcess(project.projectId, "dev", skipTests, envName, accessToken);
-//             }
-//         }
-//     } else if(deployMasterValue){
-//         for (const project of projects) {
-//             if (project.branchName !== "") {
-//                 finalMessage += await postProcess(project.projectId, project.branchName, skipTests, envName, accessToken);
-//             } else {
-//                 finalMessage += await postProcess(project.projectId, "master", skipTests, envName, accessToken);
-//             }
-//         }
-//     } else {
-//         for (const project of projects) {
-//             if (project.branchName !== "") {
-//                 finalMessage += await postProcess(project.projectId, project.branchName, skipTests, envName, accessToken);
-//             }
-//         }
-//     }
-//
-//     return finalMessage;
-// }
-// function getProjectName(projectId){
-//     const projects = [
-//         {name: "Core:", projectId: "61381988"},
-//         {name: "Monorepo:", projectId: "61381477"},
-//         {name: "Core-Services:", projectId: "61381858"},
-//         {name: "Api-Gateway:", projectId: "61381918"},
-//         {name: "Dashboard:", projectId: "61381520"},
-//
-//     ]
-//     const project = projects.find((p) => p.projectId === projectId);
-//     return project ? project.name : null;
-//
-// }
-// async function postProcess(projectId, branchName, skipTests, envName, accessToken) {
-//
-//     if (!accessToken) {
-//         return "Access token is missing. Please provide a valid token.\n";
-//     }
-//
-//     const body = {
-//         ref: branchName,
-//         variables: [
-//             {
-//                 "variable_type": "env_var",
-//                 "key": "PERSONAL_NAMESPACE",
-//                 "value": envName
-//             }
-//         ]
-//     };
-//
-//     if (projectId === "61381477" && skipTests) {
-//         body.variables.push({
-//             "variable_type": "env_var",
-//             "key": "FORCE_SKIP_TESTS",
-//             "value": "true"
-//         });
-//     }
-//
-//     return fetch("https://gitlab.com/api/v4/projects/" + projectId + "/pipeline", {
-//         method: "POST",
-//         body: JSON.stringify(body),
-//         headers: {
-//             "Content-type": "application/json; charset=UTF-8",
-//             "PRIVATE-TOKEN": accessToken
-//         }
-//     })
-//         .then((response) => response.json())
-//         .then((json) => {
-//             if (json.status === "created") {
-//                 const clickableLink = `<a href="${json.web_url}" target="_blank">Go to pipeline page</a>`;
-//                 return getProjectName(projectId) + "✅ Pipeline created successfully. \n" +
-//                     "Job URL: " + clickableLink + " ✅\n";
-//             } else {
-//                 return getProjectName(projectId) + "❌ Request failed: " + JSON.stringify(json.message) + " ❌\n";
-//             }
-//         })
-//         .catch((error) => {
-//             return getProjectName(projectId) + "❌ Error during request: " + error.message + " ❌\n";
-//         });
-//
-// }
