@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function() {
     clearTrigger.addEventListener("click", function () {
         clearClickCount++;
 
-        if (clearClickCount === 5) {
+        if (clearClickCount === 2) {
             clearClickCount = 0;
             chrome.runtime.sendMessage({ action: "clearStorage" });
         }
